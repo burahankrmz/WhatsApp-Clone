@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'package:whatsapp_clone/model/user_model.dart';
 
 abstract class UsersRepo {
@@ -9,8 +9,10 @@ abstract class UsersRepo {
 class UserServices implements UsersRepo {
   @override
   Future<List<User>> getUserList() async {
-    final response = await Dio().get('https://reqres.in/api/users/');
-    List<User> users = userFromJson(response.data);
+    final response = await Dio().get('https://reqres.in/api/users');
+    DataResponse itUsers = DataResponse.fromJson(response.data);
+    List<User> users = itUsers.user;
+    debugPrint(users.toString());
     return users;
   }
 }

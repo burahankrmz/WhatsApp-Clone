@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:whatsapp_clone/bloc/bloc/users_bloc.dart';
 import 'package:whatsapp_clone/constants/color_manager.dart';
+import 'package:whatsapp_clone/model/user_model.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -17,6 +20,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _loadUsers();
+  }
+
+  _loadUsers() async {
+    BlocProvider.of<UsersBloc>(context).add(FetchUsers());
   }
 
   @override
@@ -48,8 +56,24 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          const Center(
-            child: Text('CHATS'),
+          BlocBuilder<UsersBloc, UsersState>(
+            builder: (context, state) {
+              if (state is UsersError) {
+                final error = state.error;
+                return Text(error);
+              }
+              if (state is UsersLoaded) {
+                List<User> user = state.user;
+
+                return ChatListTile(user);
+              }
+              if (state is UsersInitial) {
+                _loadUsers();
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            },
           ),
           const PersonListTile(),
           Center(
@@ -83,6 +107,53 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           ),
         ],
       ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class ChatListTile extends StatelessWidget {
+   ChatListTile(this.users, {Key? key})
+      : super(key: key);
+  final List<User> users;
+
+  final TextStyle _datesTextStyle =
+      const TextStyle(fontSize: 12, color: Colors.grey);
+
+  List<String> dates = [
+    '00:49',
+    '23:01',
+    '22:00',
+    'Yesterday',
+    'Yesterday',
+    'Yesterday'
+  ];
+
+  List<String> messages = [
+    'Will you coming brother?',
+    'Yeah I will be right there.',
+    'I love you so much honey. See you soon',
+    'Did you finish your job. We waiting you',
+    'Lets Go Bro We will win this match.',
+    'I want to learn Flutter Will you help me'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: users.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          onTap: () {},
+          leading: CircleAvatar(
+            backgroundColor: Colors.transparent,
+            backgroundImage: NetworkImage(users[index].avatar),
+          ),
+          title: Text(users[index].firstName),
+          subtitle: Text(messages[index]),
+          trailing: Text(dates[index], style: _datesTextStyle),
+        );
+      },
     );
   }
 }

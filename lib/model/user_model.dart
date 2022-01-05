@@ -1,43 +1,31 @@
-// To parse this JSON data, do
-//
-//     final user = userFromJson(jsonString);
+import 'package:json_annotation/json_annotation.dart';
 
-import 'dart:convert';
+part 'user_model.g.dart';
 
-List<User> userFromJson(String str) =>
-    List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
+@JsonSerializable()
+class DataResponse {
+  @JsonKey(name: "data")
+  List<User> user;
+  DataResponse(this.user);
+  factory DataResponse.fromJson(Map<String, dynamic> json) => _$DataResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$DataResponseToJson(this);
+}
 
-String userToJson(List<User> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
+@JsonSerializable()
 class User {
-  User({
-    this.id,
-    this.email,
-    this.firstName,
-    this.lastName,
-    this.avatar,
-  });
+  @JsonKey(name: "id")
+  int id;
+  @JsonKey(name: "email")
+  String email;
+  @JsonKey(name: "first_name")
+  String firstName;
+  @JsonKey(name: "last_name")
+  String lastName;
+  @JsonKey(name: "avatar")
+  String avatar;
 
-  int? id;
-  String? email;
-  String? firstName;
-  String? lastName;
-  String? avatar;
+  User(this.id, this.email, this.firstName, this.lastName, this.avatar);
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json["id"],
-        email: json["email"],
-        firstName: json["first_name"],
-        lastName: json["last_name"],
-        avatar: json["avatar"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "email": email,
-        "first_name": firstName,
-        "last_name": lastName,
-        "avatar": avatar,
-      };
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 }
