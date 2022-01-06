@@ -1,16 +1,19 @@
-# whatsapp_clone
 
-A new Flutter project.
 
-## Getting Started
+  
+# WhatsApp Ui Clone 
 
-This project is a starting point for a Flutter application.
+## Tech Stack
+- Developed with **Flutter**
+- Used **BLoC** for state management
+- Used **RestAPI** from reqres.in
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+#ScreenShots
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<div align="start">
+    <img src="https://user-images.githubusercontent.com/76684491/148306953-5b2d858f-a49e-4b68-8ef1-b788534c4a4f.png" width="200px"</img>
+    <img src="https://user-images.githubusercontent.com/76684491/148306962-30ae47be-8169-4949-87da-9847b235cbdf.png" width="200px"</img> 
+    <img src="https://user-images.githubusercontent.com/76684491/148306967-8b8bd639-4bf2-4080-8403-2c59fa1aea46.png" width="200px"</img> 
+</div>
+
