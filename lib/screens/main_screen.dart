@@ -13,7 +13,15 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late TabController _tabController;
-
+  List<String> choices = <String>[
+    'New Group',
+    'New broadcast',
+    'Linked devices',
+    'Starred messages',
+    'Settings',
+  ];
+  final TextStyle _datesTextStyle =
+      const TextStyle(fontSize: 14, color: Colors.black);
   @override
   void initState() {
     super.initState();
@@ -42,8 +50,16 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildMenuButton() =>
-      IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert));
+  Widget _buildMenuButton() {
+    return PopupMenuButton(itemBuilder: (context) {
+      return choices.map((String choice) {
+        return PopupMenuItem<String>(
+          value: choice,
+          child: Text(choice, style: _datesTextStyle),
+        );
+      }).toList();
+    });
+  }
 
   Widget _buildSearchBtn() =>
       IconButton(onPressed: () {}, icon: const Icon(Icons.search));
