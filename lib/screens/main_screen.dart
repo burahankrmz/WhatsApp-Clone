@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:whatsapp_clone/bloc/bloc/users_bloc.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:whatsapp_clone/bloc/users_bloc/users_bloc.dart';
 import 'package:whatsapp_clone/constants/color_manager.dart';
 import 'package:whatsapp_clone/model/user_model.dart';
+import 'package:whatsapp_clone/screens/contact_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
+  late UsersBloc usersBloc;
   late TabController _tabController;
   List<String> choices = <String>[
     'New Group',
@@ -26,18 +29,48 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _loadUsers();
+    //_loadUsers();
+    usersBloc = BlocProvider.of<UsersBloc>(context);
   }
 
   _loadUsers() async {
-    BlocProvider.of<UsersBloc>(context).add(FetchUsers());
+    usersBloc.add(FetchUsers());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    usersBloc.close();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _buildBody(),
+      body: Stack(
+        children: [
+          _buildBody(),
+          _buildFloatingBtn(),
+        ],
+      ),
+    );
+  }
+
+  Positioned _buildFloatingBtn() {
+    return Positioned(
+      right: 15,
+      bottom: 15,
+      child: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              PageTransition(
+                  child: const ContactsScreen(),
+                  type: PageTransitionType.rightToLeft));
+        },
+        backgroundColor: ColorManager.tealGreen,
+        child: const Icon(Icons.message),
+      ),
     );
   }
 
