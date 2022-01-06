@@ -13,8 +13,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late TabController _tabController;
-  final TextStyle _callsBodyText =
-      const TextStyle(fontSize: 18, color: Colors.grey, letterSpacing: 1.5);
 
   @override
   void initState() {
@@ -39,34 +37,33 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     return AppBar(
       backgroundColor: ColorManager.tealGreen,
       title: const Text('WhatsApp'),
-      actions: [
-        _buildSearchBtn(),
-        _buildMenuButton()
-      ],
+      actions: [_buildSearchBtn(), _buildMenuButton()],
       bottom: _buildTabbar(),
     );
   }
 
-  Widget _buildMenuButton() => IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert));
+  Widget _buildMenuButton() =>
+      IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert));
 
-  Widget _buildSearchBtn() => IconButton(onPressed: () {}, icon: const Icon(Icons.search));
+  Widget _buildSearchBtn() =>
+      IconButton(onPressed: () {}, icon: const Icon(Icons.search));
 
   TabBar _buildTabbar() {
     return TabBar(
-        controller: _tabController,
-        indicatorColor: ColorManager.white,
-        tabs: const [
-          Tab(
-            text: 'CHATS',
-          ),
-          Tab(
-            text: 'STATUS',
-          ),
-          Tab(
-            text: 'CALLS',
-          ),
-        ],
-      );
+      controller: _tabController,
+      indicatorColor: ColorManager.white,
+      tabs: const [
+        Tab(
+          text: 'CHATS',
+        ),
+        Tab(
+          text: 'STATUS',
+        ),
+        Tab(
+          text: 'CALLS',
+        ),
+      ],
+    );
   }
 
   Widget _buildBody() {
@@ -75,63 +72,113 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       children: [
         _buildChatList(),
         const PersonListTile(),
-        _buildCallsBody(),
+        _buildCallList(),
       ],
     );
   }
 
-  Widget _buildCallsBody() {
-    return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                'To start calling contacts who have',
-                style: _callsBodyText,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                'WhatsApp. tap at the bottom of your',
-                style: _callsBodyText,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                'screen',
-                style: _callsBodyText,
-              ),
-            ),
-          ],
-        ),
-      );
-  }
-
   BlocBuilder<UsersBloc, UsersState> _buildChatList() {
     return BlocBuilder<UsersBloc, UsersState>(
-        builder: (context, state) {
-          if (state is UsersError) {
-            final error = state.error;
-            return Text(error);
-          }
-          if (state is UsersLoaded) {
-            List<User> user = state.user;
+      builder: (context, state) {
+        if (state is UsersError) {
+          final error = state.error;
+          return Text(error);
+        }
+        if (state is UsersLoaded) {
+          List<User> user = state.user;
 
-            return ChatListTile(user);
-          }
-          if (state is UsersInitial) {
-            _loadUsers();
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
-      );
+          return ChatListTile(user);
+        }
+        if (state is UsersInitial) {
+          _loadUsers();
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+
+  BlocBuilder<UsersBloc, UsersState> _buildCallList() {
+    return BlocBuilder<UsersBloc, UsersState>(
+      builder: (context, state) {
+        if (state is UsersError) {
+          final error = state.error;
+          return Text(error);
+        }
+        if (state is UsersLoaded) {
+          List<User> user = state.user;
+
+          return CallListTile(user);
+        }
+        if (state is UsersInitial) {
+          _loadUsers();
+        }
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class CallListTile extends StatelessWidget {
+  CallListTile(this.users, {Key? key}) : super(key: key);
+  final List<User> users;
+
+  List<bool> callType = [true, false, false, true, true, false];
+
+  List<String> messages = [
+    'Today, 23:12',
+    'Today, 15:23',
+    'Today, 11:40',
+    'Yesterday, 18:34',
+    'Yesterday, 15:54',
+    'Yesterday, 12:00'
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: users.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          onTap: () {},
+          leading: _buildUserImage(index),
+          title: _buildUserName(index),
+          subtitle: _buildCallTypeIcon(index),
+          trailing: _buildCallBtn(),
+        );
+      },
+    );
+  }
+
+  Widget _buildUserImage(int index) {
+    return CircleAvatar(
+        backgroundColor: Colors.transparent,
+        backgroundImage: NetworkImage(users[index].avatar));
+  }
+
+  Widget _buildUserName(int index) => Text(users[index].firstName);
+
+  Widget _buildCallBtn() {
+    return IconButton(
+      onPressed: () {},
+      icon: Icon(Icons.call, color: ColorManager.tealGreen),
+    );
+  }
+
+  Widget _buildCallTypeIcon(int index) {
+    return Row(
+      children: [
+        callType[index]
+            ? Icon(Icons.call_made, size: 16, color: ColorManager.tealGreen)
+            : Icon(Icons.call_received,
+                size: 16, color: ColorManager.tealGreen),
+        const SizedBox(width: 5),
+        Text(messages[index]),
+      ],
+    );
   }
 }
 
