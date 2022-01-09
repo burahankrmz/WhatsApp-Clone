@@ -46,70 +46,90 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: _buildAppBar(),
       body: Stack(
         children: [
-          Positioned(
-            bottom: 5,
-            left: 5,
-            child: SizedBox(
-              height: 45,
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Material(
-                        color: Colors.white,
-                        elevation: 4,
-                        borderRadius: BorderRadius.circular(30),
-                        child: TextField(
-                          minLines: 1,
-                          maxLines: 6,
-                          decoration: InputDecoration(
-                            prefixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.emoji_emotions_outlined,
-                                color: Colors.grey.shade500,
-                              ),
-                            ),
-                            suffixIcon: IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.photo_camera_sharp,
-                                  color: Colors.grey.shade500,
-                                )),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            contentPadding: const EdgeInsets.only(left: 10),
-                            hintText: 'Message',
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: FloatingActionButton(
-                        backgroundColor: ColorManager.tealGreen,
-                        onPressed: () {},
-                        child: const Icon(Icons.mic),
-                      ),
-                    ),
-                  ),
-                ],
+          _buildBottom(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottom() {
+    return Positioned(
+      bottom: 5,
+      left: 5,
+      child: SizedBox(
+        height: 45,
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          children: [
+            _buildMessageField(),
+            _buildMicBtn(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMicBtn() {
+    return Expanded(
+      flex: 1,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: FloatingActionButton(
+          backgroundColor: ColorManager.tealGreen,
+          onPressed: () {},
+          child: const Icon(Icons.mic),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMessageField() {
+    return Expanded(
+      flex: 6,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: Material(
+          color: Colors.white,
+          elevation: 4,
+          borderRadius: BorderRadius.circular(30),
+          child: TextField(
+            minLines: 1,
+            maxLines: 6,
+            decoration: InputDecoration(
+              prefixIcon: _buildEmojiBtn(),
+              suffixIcon: _buildCameraBtn(),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              contentPadding: const EdgeInsets.only(left: 10),
+              hintText: 'Message',
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.circular(30),
               ),
             ),
           ),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCameraBtn() {
+    return IconButton(
+        onPressed: () {},
+        icon: Icon(
+          Icons.photo_camera_sharp,
+          color: Colors.grey.shade500,
+        ));
+  }
+
+  Widget _buildEmojiBtn() {
+    return IconButton(
+      onPressed: () {},
+      icon: Icon(
+        Icons.emoji_emotions_outlined,
+        color: Colors.grey.shade500,
       ),
     );
   }
