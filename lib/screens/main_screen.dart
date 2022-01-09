@@ -4,6 +4,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:whatsapp_clone/bloc/users_bloc/users_bloc.dart';
 import 'package:whatsapp_clone/constants/color_manager.dart';
 import 'package:whatsapp_clone/model/user_model.dart';
+import 'package:whatsapp_clone/screens/chat_screen.dart';
 import 'package:whatsapp_clone/screens/contact_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -263,7 +264,14 @@ class ChatListTile extends StatelessWidget {
       itemCount: users.length,
       itemBuilder: (context, index) {
         return ListTile(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+                context,
+                PageTransition(
+                    child: ChatScreen(
+                      users[index]
+                    ), type: PageTransitionType.rightToLeft));
+          },
           leading: CircleAvatar(
             backgroundColor: Colors.transparent,
             backgroundImage: NetworkImage(users[index].avatar),
